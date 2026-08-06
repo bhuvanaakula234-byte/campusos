@@ -1,0 +1,50 @@
+%% Mermaid ER diagram for CampusOS (simplified)
+%% Render with a Mermaid renderer (e.g., mermaid.live)
+
+erDiagram
+    USERS {
+        UUID id PK
+        string email
+        string full_name
+    }
+    ROLES {
+        int id PK
+        string name
+    }
+    USER_ROLES {
+        UUID user_id FK
+        int role_id FK
+    }
+    DEPARTMENTS {
+        int id PK
+        string code
+        string name
+    }
+    FACULTY {
+        int id PK
+        UUID user_id FK
+        int department_id FK
+    }
+    STUDENTS {
+        int id PK
+        UUID user_id FK
+        int department_id FK
+        string enrollment_number
+    }
+    SUBJECTS {
+        int id PK
+        int course_id FK
+        string code
+        string title
+    }
+    TIMETABLE ||--o{ SUBJECTS : includes
+    FACULTY ||--o{ SUBJECTS : teaches
+    USERS ||--o{ USER_ROLES : has
+    ROLES ||--o{ USER_ROLES : assigned_to
+    DEPARTMENTS ||--o{ FACULTY : contains
+    DEPARTMENTS ||--o{ STUDENTS : contains
+    STUDENTS ||--o{ ATTENDANCE_RECORDS : has
+    SUBJECTS ||--o{ ATTENDANCE_SESSIONS : has
+    ATTENDANCE_SESSIONS ||--o{ ATTENDANCE_RECORDS : has
+
+%% Notes: This is a simplified diagram highlighting main entities and relations.

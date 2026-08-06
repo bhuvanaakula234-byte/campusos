@@ -1,0 +1,43 @@
+-- Initial schema for CampusOS (PostgreSQL)
+
+CREATE TABLE IF NOT EXISTS roles (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  full_name VARCHAR(255),
+  role_id INTEGER REFERENCES roles(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Student-specific table
+CREATE TABLE IF NOT EXISTS students (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  enrollment_number VARCHAR(100) UNIQUE,
+  branch VARCHAR(100),
+  semester INTEGER,
+  cgpa NUMERIC(4,2)
+);
+
+-- Basic events table
+CREATE TABLE IF NOT EXISTS events (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  start_time TIMESTAMP,
+  end_time TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Sample data
+INSERT INTO roles (name) VALUES ('STUDENT') ON CONFLICT DO NOTHING;
+INSERT INTO roles (name) VALUES ('FACULTY') ON CONFLICT DO NOTHING;
+INSERT INTO roles (name) VALUES ('HOD') ON CONFLICT DO NOTHING;
+INSERT INTO roles (name) VALUES ('PRINCIPAL') ON CONFLICT DO NOTHING;
+INSERT INTO roles (name) VALUES ('PLACEMENT') ON CONFLICT DO NOTHING;
+INSERT INTO roles (name) VALUES ('ADMIN') ON CONFLICT DO NOTHING;
